@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unlock VIP Group</title>
+<style>
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#0a0a0a;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px}
+  .card{background:#1c1c1e;border-radius:16px;padding:32px 24px;max-width:360px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+  h1{font-size:1.5em;margin:0 0 .4em}p{font-size:.95em;color:#8e8e93;margin:.4em 0 1.2em}
+  .spinner{width:50px;height:50px;border:4px solid #2c2c2e;border-top-color:#5865f2;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1.2em}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #counter{font-size:2.4em;font-weight:700;color:#5865f2;margin:.2em 0}
+  #btn{width:100%;background:#5865f2;border:0;color:#fff;padding:14px 0;font-size:1.05em;border-radius:8px;cursor:pointer;transition:background .2s}
+  #btn:disabled{background:#4752c4;cursor:not-allowed}
+  .note{font-size:.75em;color:#8e8e93;margin-top:.8em}
+  #tooEarly{color:#ff5f57;font-weight:600}
+</style>
+</head><body>
+<div class="card">
+  <div id="step1">
+    <h1>🔓 Unlock VIP Group</h1>
+    <p>Tap below → ad opens → <b>stay 30 s</b> → come back → join.</p>
+    <button id="unlock">UNLOCK</button>
+  </div>
+
+  <div id="step2" style="display:none">
+    <div class="spinner"></div>
+    <h1>Keep this tab open…</h1>
+    <p>Ad running in <b>new tab</b>.<br>On-screen timer must hit <b>0</b>.</p>
+    <div id="counter">30</div>
+    <p id="tooEarly"></p>
+    <button id="btn" disabled>Please wait…</button>
+    <p class="note">Scroll a bit so the timer stays alive.</p>
+  </div>
+</div>
+
+<script>
+  const unlockBtn   = document.getElementById('unlock');
+  const step1       = document.getElementById('step1');
+  const step2       = document.getElementById('step2');
+  const btn         = document.getElementById('btn');
+  const counter     = document.getElementById('counter');
+  const tooEarly    = document.getElementById('tooEarly');
+
+  let visible = 30, real = 40;
+  let timerVisible, timerReal;
+  let frozen = false;
+
+  function resetFlow() {
+    clearInterval(timerVisible);
+    clearInterval(timerReal);
+    visible = 30; real = 40;
+    counter.textContent = visible;
+    btn.disabled = true;
+    btn.textContent = 'Please wait…';
+    tooEarly.textContent = '';
+    frozen = false;
+  }
+
+  function startTimers() {
+    if (frozen) return;
+    timerVisible = setInterval(() => {
+      if (frozen) return;
+      visible--;
+      counter.textContent = visible;
+      if (visible === 0) clearInterval(timerVisible);
+    }, 1000);
+
+    timerReal = setInterval(() => {
+      if (frozen) return;
+      real--;
+      if (real <= 0) {
+        clearInterval(timerReal);
+        clearInterval(timerVisible);
+        btn.disabled = false;
+        btn.textContent = '✅ Enter Group';
+        btn.onclick = () => window.open('https://t.me/+i37QrbULGlc0ZDE1', '_blank');
+      }
+    }, 1000);
+  }
+
+  unlockBtn.onclick = () => {
+    window.open('https://otieu.com/4/10414260', '_blank');
+    step1.style.display = 'none';
+    step2.style.display = 'block';
+    resetFlow();
+    startTimers();
+  };
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      frozen = true;
+    } else {
+      if (real > 0) {
+        tooEarly.textContent = 'You left early! Tap RESTART and wait full 30 s on this screen.';
+        btn.disabled = false;
+        btn.textContent = 'RESTART';
+        btn.onclick = () => {
+          resetFlow();
+          window.open('https://otieu.com/4/10414260', '_blank');
+          startTimers();
+        };
+      }
+    }
+  });
+</script>
+</body></html>
